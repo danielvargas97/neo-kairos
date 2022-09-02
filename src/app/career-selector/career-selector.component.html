@@ -1,0 +1,95 @@
+<div class="top">
+    <h1>Kairos Selector</h1>
+</div>
+<div>
+    <div>
+        <div class="content">
+            <label>Carrera</label>
+            <select class="form-select" [(ngModel)]='selectedCareer'>
+                <option></option>
+                <option *ngFor="let item of careerList" [value]='item.name'>{{item.name}}</option>
+            </select>
+        </div>
+
+        <div class="content h-25vh" *ngIf="selectedCareer != ''">
+            <div class="">
+                <button class="btn btn-primary" type="button" (click)="getCareer('')">Buscar Materias</button>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isSelectedCareer()">
+        <div class="subject-container">
+
+            <div *ngIf="subjectList.length > 0">
+                <h4>Materias</h4>
+                <input type="text" class="form-control" [(ngModel)]="searchedSubject"
+                    (input)="filterSubjects(searchedSubject)">
+
+                <div class="list-group overflow-y-auto h-25vh">
+                    <button type="button" class="list-group-item list-group-item-action"
+                        *ngFor="let item of filteredItems" (click)="selectSubject(item)">{{item.id}} - {{item.name}}
+                        <span *ngIf="selectedSubjectList.includes(item)" class="fa-solid fa-check"></span>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="button-container" *ngIf="filteredItems.length > 0">
+                <button class="btn btn-primary mb-3">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+                <button class="btn btn-danger" (click)="cleanSelectedList()">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+
+            </div>
+
+            <div *ngIf="subjectList.length > 0">
+                <h4>Materias Seleccionadas</h4>
+                <div class="list-group overflow-y-auto h-25vh">
+
+                    <div *ngIf="selectedSubjectList?.length == 0">
+                        <p>Aquí no hay nada (como en el corazon de mi ex :'v).</p>
+                        <p>Pero bueno, selecciona algunas materias para empezar.</p>
+                    </div>
+
+                    <div class=" list-group-item deselector" *ngFor="let item of selectedSubjectList">
+
+                        <li class="list-group-item deselector-elem no-border">
+                            {{item.id}} - {{item.name}} <span class="fa-solid fa-check"></span>
+                        </li>
+                        <button class="btn btn-primary" (click)="unselectSubject(item)">
+                            <i class="fa-solid fa-angles-left"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content h-35vh" *ngIf="selectedSubjectList.length > 0">
+            <button class="btn btn-success mb-3">
+                Iniciar Sesion <span class="fa-solid fa-arrow-right"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div *ngFor="let item of selectedSubjectList">
+        <h5>{{item.name}}</h5>
+        <div class="form-check" *ngFor="let group of item.subjectDetailList">
+            
+                <label class="form-check-label mr-3" [for]="item.id">
+                    <input class="form-check-input" [id]='item.id' [value]='group.id' type="radio" [(ngModel)]="proncho">
+
+                    <span class="fa-solid fa-book"></span>
+                    {{group.id}}
+                </label>
+        </div>
+
+
+    </div>
+</div>
+
+<router-outlet></router-outlet>

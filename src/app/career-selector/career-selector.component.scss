@@ -1,0 +1,54 @@
+.content{
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.subject-container{
+    height: 10vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.button-container{
+    display: flex;
+    flex-direction: column;    
+}
+.overflow-y-auto{
+    overflow-y: auto;
+}
+
+.h-25vh{
+    height: 25vh;
+}
+.h-35vh{
+    height: 35vh;
+}
+
+
+.top{
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.deselector{
+    display: flex;
+    margin-right: 1vw;
+    justify-content: space-between;
+}
+
+.deselector-elem{
+    margin-right: 1vw;
+}
+
+.no-border {
+    border: none;
+}
+
+.form-select{
+    width: 50%;
+    margin-left: 3vh;
+}
