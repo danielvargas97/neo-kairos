@@ -6,13 +6,13 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CareerSelectorComponent } from './career-selector/career-selector.component';
 import { FormsModule } from '@angular/forms';
-import { SubjectListFilterPipe } from './subject-list-filter.pipe';
+import { SubjectCheckerComponent } from './subject-checker/subject-checker.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CareerSelectorComponent,
-    SubjectListFilterPipe
+    SubjectCheckerComponent
   ],
   imports: [
     BrowserModule,

@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { CareerSelectorComponent } from './career-selector/career-selector.component';
 const routes: Routes = [
 
-  { path: 'career', component: CareerSelectorComponent },
+  { path: '', component: CareerSelectorComponent}
+
 ];
 
 @NgModule({

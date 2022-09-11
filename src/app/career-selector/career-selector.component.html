@@ -9,13 +9,13 @@
                 <option></option>
                 <option *ngFor="let item of careerList" [value]='item.name'>{{item.name}}</option>
             </select>
-        </div>
 
-        <div class="content h-25vh" *ngIf="selectedCareer != ''">
-            <div class="">
+            <div>
                 <button class="btn btn-primary" type="button" (click)="getCareer('')">Buscar Materias</button>
             </div>
+
         </div>
+
     </div>
     <div *ngIf="isSelectedCareer()">
         <div class="subject-container">
@@ -34,7 +34,7 @@
             </div>
 
 
-            <div class="button-container" *ngIf="filteredItems.length > 0">
+            <div class="button-container m-top-bottom-3" *ngIf="filteredItems.length > 0">
                 <button class="btn btn-primary mb-3">
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -66,29 +66,200 @@
                 </div>
             </div>
         </div>
-
-        <div class="content h-35vh" *ngIf="selectedSubjectList.length > 0">
-            <button class="btn btn-success mb-3">
-                Iniciar Sesion <span class="fa-solid fa-arrow-right"></span>
-            </button>
-        </div>
     </div>
 </div>
 
-<div class="content">
-    <div *ngFor="let item of selectedSubjectList">
-        <h5>{{item.name}}</h5>
-        <div class="form-check" *ngFor="let group of item.subjectDetailList">
-            
-                <label class="form-check-label mr-3" [for]="item.id">
-                    <input class="form-check-input" [id]='item.id' [value]='group.id' type="radio" [(ngModel)]="proncho">
 
+<div class="content m-top-bottom-3" *ngIf="selectedSubjectList.length > 0">
+    <h3>Tu horario de clase</h3>
+</div>
+
+<div class="content">
+    <div class="table-container" *ngIf="selectedSubjectList.length > 0">
+
+
+        <table class="table table-striped">
+
+
+
+            <tr class="">
+                <th class="my-row"><span class="fa fa-regular fa-calendar-days"></span></th>
+                <th *ngFor="let item of days" class="my-row hour-header">{{item}}</th>
+            </tr>
+
+
+            <tr *ngFor="let elem of hours; let hourIndex=index">
+                <th class="my-row-header day-header">{{elem}}:00</th>
+
+                <td class="my-row" *ngFor="let day of days; let dayIndex=index">
+
+                    <div class="full-cell" *ngIf="schedule[day][hourIndex].infoStudent != null">
+                        <div><h6>{{schedule[day][hourIndex].infoStudent.subject.name}}</h6></div>
+                        <br>
+                        <div><small>{{schedule[day][hourIndex].infoStudent.group.block.loc}}</small></div>
+                        
+                    </div>
+                    <div *ngIf="schedule[day][hourIndex].infoStudent == null">                        
+                        <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                        <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                        <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
+                        <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
+                    </div>
+                </td>
+            
+            </tr>
+
+        </table>
+    </div>
+
+</div>
+
+<div class="content m-top-bottom-3" *ngIf="scheduledList.length>0">
+    <button class="btn btn-primary" (click)="printSchedule()">
+        <span>Descargar Horario </span><i class="fa-solid fa-file-arrow-down"></i>
+    </button>
+</div>
+
+<div class="subject-group-container">
+    <div class="subject-group-container-child" *ngFor="let item of selectedSubjectList">
+        <h5>{{item.name}}</h5>
+
+
+        <div class="form-check inline-block" *ngFor="let group of item.subjectDetailList; let itemIndex = index">
+            <div *ngIf="itemIndex == 0">
+                <input class="form-check-input" type="radio" [name]="item.id" [value]="" [(ngModel)]="group.value"
+                    (ngModelChange)="filterGroups(item.id, '')" />
+                <label class="form-check-label mr-3" [for]="item.id">
+                    <span class="fa-solid fa-book"></span> Ninguno
+                </label>
+            </div>
+
+            <div>
+                <input class="form-check-input" type="radio" [name]="item.id" [value]="item.id + '|' + group.id"
+                    [(ngModel)]="item.value" (ngModelChange)="filterGroups(item.id, group.id)"
+                    [disabled]="group.isDisabled" />
+                <label class="form-check-label mr-3" [for]="item.id">
                     <span class="fa-solid fa-book"></span>
                     {{group.id}}
                 </label>
+
+                <button type="button" class="btn btn-outline-secondary no-border" [ngbPopover]="popContent"
+                    triggers="mouseenter:mouseleave" popoverTitle="Info. de la materia" placement="bottom auto">
+                    <span class="fa-solid fa-circle-info"></span>
+                </button>
+
+                <ng-template #popContent class="popover-style">
+                    <div>
+                        <h6>{{group.id}}</h6>
+                    </div>
+                    <div>
+                        <h6>Horario</h6>
+                        <div *ngFor="let groupBlock of group.block">
+                            <li>{{groupBlock.day}} {{groupBlock.start}} - {{groupBlock.end}}</li>
+                            <p>{{groupBlock.loc}}</p>
+                        </div>
+
+                    </div>
+                </ng-template>
+            </div>
         </div>
 
 
+    </div>
+</div>
+
+
+<div class="content">
+
+    <div class="table-container" *ngIf="scheduledList.length > 0" hidden>
+
+
+        <table id="schedTable" class="table table-striped">
+
+
+
+            <tr class="">
+                <th class="my-row"><span class="fa-4x fa-regular fa-calendar-days"></span></th>
+                <th *ngFor="let item of days" class="my-row hour-header">{{item}}</th>
+            </tr>
+
+
+            <tr *ngFor="let elem of hours; let hourIndex=index">
+                <th class="my-row-header day-header">{{elem}}:00</th>
+
+                <td class="my-row" *ngFor="let day of days; let dayIndex=index">
+
+                    <div class="full-cell" *ngIf="schedule[day][hourIndex].infoStudent != null">
+                        <div class="font-weight-bold text-capitalize">
+                            <b>{{schedule[day][hourIndex].infoStudent.subject.name}}</b>
+                        </div>
+                        <br>
+                        <br>
+                        <div><small>{{schedule[day][hourIndex].infoStudent.group.block.loc}}</small></div>
+                        
+                    </div>
+                    <div *ngIf="schedule[day][hourIndex].infoStudent == null">                        
+                        <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                        <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                        <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
+                        <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
+                    </div>
+                </td>
+            
+            </tr>
+
+        </table>
+
+        <div>
+            <button class="btn btn-primary" (click)="printSchedule()">
+                <i class="fa-solid fa-file-arrow-down"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="csd" class="content" *ngIf="scheduledList.length > 0" hidden>
+    <div class="row p-side-10">
+        <div class="col-lg">
+            <div class="row">
+                <div class="col-sm-1 mostrarHorasLg" style="padding: 0px;">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="header">-</div>
+                            <div class="cuerpo" *ngFor="let hour of hours">{{hour}}:00</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg" *ngFor="let day of days; let dayIndex=index">
+                    <div class="row">
+                        <div class="col-sm-4 mostrar" style="padding: 0px;">
+                            <div class="header">-</div>
+                            <div class="cuerpo"*ngFor="let hour of hours">{{hour}}:00</div>
+                        </div>
+                        <div class="col-sm" style="padding: 0px;">
+                            <div class="header">{{day}}</div>
+                            <div class="cuerpo" *ngFor="let item of schedule[day]; let hourIndex=index">
+
+                                <div class="full-cell" *ngIf="item.infoStudent != null">
+                                    <h6>{{item.infoStudent.subject.name}}</h6>
+                                    <small>{{item.infoStudent.group.block.loc}}</small>
+                                </div>
+                                <div *ngIf="item.infoStudent == null">                        
+                                    <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                                    <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                                    <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
+                                    <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+
+            </div>
+        </div>
     </div>
 </div>
 
