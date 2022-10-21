@@ -69,60 +69,18 @@
     </div>
 </div>
 
-
 <div class="content m-top-bottom-3" *ngIf="selectedSubjectList.length > 0">
-    <h3>Tu horario de clase</h3>
-</div>
-
-<div class="content">
-    <div class="table-container" *ngIf="selectedSubjectList.length > 0">
-
-
-        <table class="table table-striped">
-
-
-
-            <tr class="">
-                <th class="my-row"><span class="fa fa-regular fa-calendar-days"></span></th>
-                <th *ngFor="let item of days" class="my-row hour-header">{{item}}</th>
-            </tr>
-
-
-            <tr *ngFor="let elem of hours; let hourIndex=index">
-                <th class="my-row-header day-header">{{elem}}:00</th>
-
-                <td class="my-row" *ngFor="let day of days; let dayIndex=index">
-
-                    <div class="full-cell" *ngIf="schedule[day][hourIndex].infoStudent != null">
-                        <div><h6>{{schedule[day][hourIndex].infoStudent.subject.name}}</h6></div>
-                        <br>
-                        <div><small>{{schedule[day][hourIndex].infoStudent.group.block.loc}}</small></div>
-                        
-                    </div>
-                    <div *ngIf="schedule[day][hourIndex].infoStudent == null">                        
-                        <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                        <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                        <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
-                        <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
-                    </div>
-                </td>
-            
-            </tr>
-
-        </table>
-    </div>
-
-</div>
-
-<div class="content m-top-bottom-3" *ngIf="scheduledList.length>0">
-    <button class="btn btn-primary" (click)="printSchedule()">
-        <span>Descargar Horario </span><i class="fa-solid fa-file-arrow-down"></i>
-    </button>
+    <h5>Selecciona el horario de las materias</h5>
 </div>
 
 <div class="subject-group-container">
     <div class="subject-group-container-child" *ngFor="let item of selectedSubjectList">
-        <h5>{{item.name}}</h5>
+        
+        
+        <div>
+            <h5>{{item.name}}</h5>
+            <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#000000" [(ngModel)]="item.color">
+        </div>
 
 
         <div class="form-check inline-block" *ngFor="let group of item.subjectDetailList; let itemIndex = index">
@@ -169,12 +127,165 @@
 </div>
 
 
+<div class="content m-top-bottom-3" *ngIf="selectedSubjectList.length > 0">
+    <h3>Tu horario de clase</h3>
+</div>
+
+<div class="content">
+    <div class="table-container" *ngIf="selectedSubjectList.length > 0">
+
+
+        <table class="table table-striped">
+
+
+
+            <tr class="">
+                <th class="my-row"><span class="fa fa-regular fa-calendar-days"></span></th>
+                <th *ngFor="let item of days" class="my-row hour-header">{{item}}</th>
+            </tr>
+
+
+            <tr *ngFor="let elem of hours; let hourIndex=index">
+                <td class="my-row-header day-header">  {{elem}}:00  </td>
+
+                <td class="my-row" *ngFor="let day of days; let dayIndex=index" >
+
+                    <div class="full-cell" *ngIf="schedule[day][hourIndex].infoStudent != null">
+                        <div>
+                            <h6>{{schedule[day][hourIndex].infoStudent.subject.name}}</h6>
+                            <div class="">
+
+                                <button type="button" class="btn no-border" [ngbPopover]="popContent"
+                                    triggers="mouseenter:mouseleave" popoverTitle="Detalle del horario"
+                                    placement="bottom auto">
+                                    <span class="fa-solid fa-circle-info"></span>
+                                </button>
+    
+                                <ng-template #popContent class="popover-style">
+                                    <div>
+                                        <h5>Materia: </h5>
+                                        <p>{{schedule[day][hourIndex].infoStudent.subject.name}}</p>
+                                        <h6>Dia:</h6>
+                                        <p class="text-capitalize">
+                                            {{schedule[day][hourIndex].infoStudent.group.block.day}}
+                                            ({{schedule[day][hourIndex].infoStudent.group.block.start}}:00 - {{schedule[day][hourIndex].infoStudent.group.block.end}}:00)
+                                        </p>
+                                        <h6>Grupo:</h6>
+                                        <p>{{schedule[day][hourIndex].infoStudent.group.id}}</p>
+                                        <h6>Ubicación y Profesor</h6>                            
+                                        <p>{{schedule[day][hourIndex].infoStudent.group.block.loc}}</p>
+                                    </div>
+    
+                                    
+                                </ng-template>                            
+    
+    
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div *ngIf="schedule[day][hourIndex].infoStudent == null">                        
+                        <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                        <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                        <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
+                        <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
+                    </div>
+                </td>
+            
+            </tr>
+
+        </table>
+    </div>
+
+</div>
+
+<div class="content">
+    <div class="table-container" *ngIf="selectedSubjectList.length > 0">
+
+
+        <table class="table table-striped">
+
+
+
+            <tr class="">
+                <th class="my-row"><span class="fa fa-regular fa-calendar-days"></span></th>
+                <th *ngFor="let item of days" class="my-row hour-header">{{item}}</th>
+            </tr>
+
+
+            <tr *ngFor="let elem of hours; let hourIndex=index">
+                <td class="my-row-header day-header">  {{elem}}:00  </td>
+
+                <table *ngFor="let day of days; let dayIndex=index">
+                    
+                    <td class="my-row"  *ngIf="schedule[day][hourIndex].infoStudent != null">
+                        <div>
+                            <h6>{{schedule[day][hourIndex].infoStudent.subject.name}}</h6>
+                            <div class="">
+    
+                                <button type="button" class="btn no-border" [ngbPopover]="popContent"
+                                    triggers="mouseenter:mouseleave" popoverTitle="Detalle del horario"
+                                    placement="bottom auto">
+                                    <span class="fa-solid fa-circle-info"></span>
+                                </button>
+    
+                                <ng-template #popContent class="popover-style">
+                                    <div>
+                                        <h5>Materia: </h5>
+                                        <p>{{schedule[day][hourIndex].infoStudent.subject.name}}</p>
+                                        <h6>Dia:</h6>
+                                        <p class="text-capitalize">
+                                            {{schedule[day][hourIndex].infoStudent.group.block.day}}
+                                            ({{schedule[day][hourIndex].infoStudent.group.block.start}}:00 - {{schedule[day][hourIndex].infoStudent.group.block.end}}:00)
+                                        </p>
+                                        <h6>Grupo:</h6>
+                                        <p>{{schedule[day][hourIndex].infoStudent.group.id}}</p>
+                                        <h6>Ubicación y Profesor</h6>                            
+                                        <p>{{schedule[day][hourIndex].infoStudent.group.block.loc}}</p>
+                                    </div>
+    
+                                    
+                                </ng-template>                            
+    
+    
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="my-row" *ngIf="schedule[day][hourIndex].infoStudent == null">
+                        <div>                        
+                            <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                            <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
+                            <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
+                            <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
+                        </div>
+                    </td>
+
+                </table>
+        
+
+
+            </tr>
+
+        </table>
+    </div>
+
+</div>
+
+<div class="content m-top-bottom-3" *ngIf="scheduledList.length>0">
+    <button class="btn btn-primary" (click)="printSchedule()">
+        <span>Descargar Horario </span><i class="fa-solid fa-file-arrow-down"></i>
+    </button>
+</div>
+
+
+
 <div class="content">
 
     <div class="table-container" *ngIf="scheduledList.length > 0" hidden>
 
 
-        <table id="schedTable" class="table table-striped">
+        <table id="schedTable" class="">
 
 
 

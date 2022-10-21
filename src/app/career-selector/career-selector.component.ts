@@ -24,6 +24,7 @@ export interface SelectedSubjectSelector {
   name: string;
   subjectDetail?: SubjectDetail[];
   value: string;
+  color?: string;
 }
 
 export interface SubjectDetail {
@@ -102,12 +103,27 @@ export class CareerSelectorComponent implements OnInit {
   }
 
   unselectSubject(subject: CareerSubject): void {
+
+
+    this.selectedSubjectList    
+    .forEach( (item) => {
+      if(item.id == subject.id){
+        item.value = undefined;
+      }
+    });
+
+    this.scheduledList = this.scheduledList.filter(item=> item.id != subject.id);
     this.selectedSubjectList = this.selectedSubjectList.filter(elem => elem.id != subject.id);
+    
   }
 
   cleanSelectedList(): void {
+    this.selectedSubjectList.forEach( (subject) => {
+      subject.value = undefined;
+    });
     this.selectedSubjectList = [];
     this.scheduledList = [];
+    this.schedule = {};
     this.generateSchedule();
   }
 

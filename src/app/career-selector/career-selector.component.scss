@@ -48,8 +48,8 @@
 }
 
 .my-row-header {
-    min-width: 5vw;
-    height: 5vh;
+    min-width: 4vw;
+    max-width: 5vw;
     text-align: center;
 }
 
@@ -97,6 +97,7 @@
     background-color: rgb(255, 255, 255);
     color: rgb(25, 25, 25);
     border: 1px white;
+    display: contents;
 }
 
 .no-content-cell {
