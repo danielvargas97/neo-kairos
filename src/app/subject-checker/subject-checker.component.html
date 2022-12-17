@@ -1,0 +1,9 @@
+<h5>{{subject.name}}</h5>
+<div class="form-check" *ngFor="let group of subject.subjectDetailList">
+
+    <input class="form-check-input" id="group.id + '-' + subject.id" [name]="subject.id" type="radio" [value]="group.id + '-' + subject.id" [(ngModel)]="selectedValue" />
+    <label class="form-check-label mr-3">
+        <span class="fa-solid fa-book"></span>
+        {{group.id}}
+    </label>
+</div>
