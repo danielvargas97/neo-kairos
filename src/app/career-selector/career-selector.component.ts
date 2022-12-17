@@ -52,13 +52,15 @@ export interface GroupSelector {
 })
 export class CareerSelectorComponent implements OnInit {
   careerList: Career[] = [];
-  selectedCareer?: string = '';
+  selectedCareer?: string | any = '';
+  searchedCareer?: string | any = '';
   searchedSubject: string = '';
   facultyList: Faculty[] = [];
   subjectList: any[] = [];
   copyList: any[] = [];
   selectedSubjectList: any[] = [];
   filteredItems: any[] = [];
+  filteredCareers: any[] = [];
   daysOfWeek = ['L', 'M', 'X', 'J', 'V', 'S', 'D']
   days = "LUNES|MARTES|MIERCOLES|JUEVES|VIERNES|SABADO|DOMINGO".split("|")
   hours = [...Array(17).keys()].map(elem => 6 + elem);
@@ -81,10 +83,12 @@ export class CareerSelectorComponent implements OnInit {
   async getCareer(career: any): Promise<any> {
     //console.log(this.selectedCareer);
     //console.log(career);
+    this.selectedCareer = career;
     this.subjectList = [];
     await this.loadFile();
 
     this.copyList = this.subjectList;
+    this.searchedCareer = '';
 
   }
   selectSubject(subject: CareerSubject): void {
@@ -98,8 +102,8 @@ export class CareerSelectorComponent implements OnInit {
       this.disableGroupsFromOtherSubjects(subject.id);
     }
 
-    console.log(this.selectedSubjectList);
-    console.log(this.schedule);
+    //console.log(this.selectedSubjectList);
+    //console.log(this.schedule);
   }
 
   unselectSubject(subject: CareerSubject): void {
@@ -127,6 +131,15 @@ export class CareerSelectorComponent implements OnInit {
     this.generateSchedule();
   }
 
+  filterCareers(val: string): void {
+
+    this.filteredCareers = Object.assign([], this.careerList);
+    if (val != '') {
+      this.filteredCareers = this.filteredCareers.filter((elem: Career) => elem.name.match(val.toUpperCase()) != null);
+    }
+  }
+
+
   filterSubjects(val: string): void {
 
     this.filteredItems = Object.assign([], this.subjectList);
@@ -140,6 +153,10 @@ export class CareerSelectorComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  hideCareerList(): Boolean {
+    return this.searchedCareer != '';
   }
 
   async loadCareerList() {
@@ -167,7 +184,7 @@ export class CareerSelectorComponent implements OnInit {
         const xmlDoc = parser.parseFromString(responseText, "text/xml");
         let lejson = [];
         let xmlFacultyList = xmlDoc.getElementsByTagName("Facultad");
-        console.log(xmlFacultyList);
+        //console.log(xmlFacultyList);
 
         for (let i = 0; i < xmlFacultyList.length; i++) {
           var facultyJson: any = {}
@@ -183,7 +200,7 @@ export class CareerSelectorComponent implements OnInit {
             if (career[j].getAttribute("name") == this.selectedCareer) {
 
               let subjects = career[j].getElementsByTagName("Asignatura");
-              console.log(subjects)
+              //console.log(subjects)
               for (let k = 0; k < subjects.length; k++) {
 
 
@@ -262,9 +279,9 @@ export class CareerSelectorComponent implements OnInit {
           .map(elem => elem.subjectDetailList)[0])
           .filter((elem: any) => elem.id == groupToUnscheduleId)[0];
   
-        console.log(groupToUnscheduleId);
-        console.log("----")
-        console.log(group)
+        //console.log(groupToUnscheduleId);
+        //console.log("----")
+        //console.log(group)
   
         this.unsetGroupSubjectOnSchedule(subjectId, group);
   
@@ -284,14 +301,14 @@ export class CareerSelectorComponent implements OnInit {
     else{
 
 
-      console.log("SubjectId: ", subjectId);
+      //console.log("SubjectId: ", subjectId);
 
       let groupOfSubject = (this.selectedSubjectList
         .filter(item => item.id == subjectId)
         .map(elem => elem.subjectDetailList)[0])
         .filter((elem: any) => elem.id == groupId)[0];
   
-      console.log(groupOfSubject);
+      //console.log(groupOfSubject);
   
       if(this.isOnScheduledList(subjectId)){      
   
@@ -301,9 +318,9 @@ export class CareerSelectorComponent implements OnInit {
           .map(elem => elem.subjectDetailList)[0])
           .filter((elem: any) => elem.id == groupToUnscheduleId)[0];
   
-        console.log(groupToUnscheduleId);
-        console.log("----")
-        console.log(group)
+        //console.log(groupToUnscheduleId);
+        //console.log("----")
+        //console.log(group)
   
         this.unsetGroupSubjectOnSchedule(subjectId, group);
   
@@ -316,17 +333,17 @@ export class CareerSelectorComponent implements OnInit {
       });
   
       if (!this.checkUnavailability(groupOfSubject)) {
-        console.log("The group %s of subject with id %s is available", groupId, subjectId);
+        //console.log("The group %s of subject with id %s is available", groupId, subjectId);
         this.setGroupSubjectOnSchedule(subjectId, groupOfSubject);
       }
   
   
-      console.log(this.schedule);
+      //console.log(this.schedule);
   
       this.disableGroupsFromOtherSubjects(subjectId);
         
-      console.log(this.selectedSubjectList);
-      console.log(this.scheduledList);
+      //console.log(this.selectedSubjectList);
+      //console.log(this.scheduledList);
   
   
       //this.printSched()
@@ -356,8 +373,8 @@ export class CareerSelectorComponent implements OnInit {
 
   unsetGroupSubjectOnSchedule(subjectId : any, group : any){
     group.block.forEach( (item :any)  => {
-      console.log("AAAA")
-      console.log(this.schedule[item.day][parseInt(item.start) - 6]);
+      //console.log("AAAA")
+      //console.log(this.schedule[item.day][parseInt(item.start) - 6]);
       this.schedule[item.day][parseInt(item.start) - 6].isOnUse = false;
       this.schedule[item.day][parseInt(item.start) - 6].infoStudent = null;
     });
@@ -450,20 +467,20 @@ export class CareerSelectorComponent implements OnInit {
   }
 
   selectSchedule(val: any): void {
-    console.log(val);
+    //console.log(val);
 
     if (val == '') {
-      console.log('F')
+      //console.log('F')
     }
     else {
       const vals = val.split("|");
       let subject = this.selectedSubjectList.filter(elem => elem.id == vals[0])[0]
-      console.log(subject);
+      //console.log(subject);
       let requiredGroup = subject.subjectDetailList.filter((elem: any) => elem.id == vals[1])[0];
-      console.log(requiredGroup);
+      //console.log(requiredGroup);
 
       let subjectOnList = this.scheduledList.filter(item => item.subject_id == subject.id)
-      console.log(subjectOnList);
+      //console.log(subjectOnList);
 
       if (subjectOnList.length > 0) {
         this.scheduledList = this.scheduledList.filter(item => item.subject_id != subject.id);
@@ -511,7 +528,7 @@ export class CareerSelectorComponent implements OnInit {
           this.scheduledList.push(elem);
         })
 
-        console.log(this.scheduledList);
+        //console.log(this.scheduledList);
 
       }
       else {
@@ -543,7 +560,7 @@ export class CareerSelectorComponent implements OnInit {
           this.scheduledList.push(elem);
         })
 
-        console.log(this.scheduledList);
+        //console.log(this.scheduledList);
       }
 
 

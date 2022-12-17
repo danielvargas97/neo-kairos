@@ -1,17 +1,24 @@
-<div class="top">
-    <h1>Kairos Selector</h1>
+<div class="top flex-column mt-3">
+    <h1>PAW UD (Planificador Academico Web)</h1>
+    <p>Selecciona tu carrera y empieza a armar tu glorioso semestre :D</p>
 </div>
 <div>
     <div>
-        <div class="content">
-            <label>Carrera</label>
-            <select class="form-select" [(ngModel)]='selectedCareer'>
-                <option></option>
-                <option *ngFor="let item of careerList" [value]='item.name'>{{item.name}}</option>
-            </select>
-
+        <div class="subject-container">
             <div>
-                <button class="btn btn-primary" type="button" (click)="getCareer('')">Buscar Materias</button>
+                <h4>Carrera</h4>
+                <input type="text" class="form-control" [(ngModel)]="searchedCareer"
+                (input)="filterCareers(searchedCareer)">
+            </div>
+            
+            <div>
+                <h4>Carreras encontradas</h4>
+                <div class="list-group overflow-y-auto h-15vh" *ngIf="hideCareerList()">                
+                    
+                    <button type="button" class="list-group-item list-group-item-action"
+                    *ngFor="let item of filteredCareers" (click)="getCareer(item.name)">{{item.id}} - {{item.name}}                    
+                    </button>
+                </div>            
             </div>
 
         </div>
@@ -78,8 +85,7 @@
         
         
         <div>
-            <h5>{{item.name}}</h5>
-            <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#000000" [(ngModel)]="item.color">
+            <h5>{{item.name}}</h5>            
         </div>
 
 
@@ -199,78 +205,6 @@
 
 </div>
 
-<div class="content">
-    <div class="table-container" *ngIf="selectedSubjectList.length > 0">
-
-
-        <table class="table table-striped">
-
-
-
-            <tr class="">
-                <th class="my-row"><span class="fa fa-regular fa-calendar-days"></span></th>
-                <th *ngFor="let item of days" class="my-row hour-header">{{item}}</th>
-            </tr>
-
-
-            <tr *ngFor="let elem of hours; let hourIndex=index">
-                <td class="my-row-header day-header">  {{elem}}:00  </td>
-
-                <table *ngFor="let day of days; let dayIndex=index">
-                    
-                    <td class="my-row"  *ngIf="schedule[day][hourIndex].infoStudent != null">
-                        <div>
-                            <h6>{{schedule[day][hourIndex].infoStudent.subject.name}}</h6>
-                            <div class="">
-    
-                                <button type="button" class="btn no-border" [ngbPopover]="popContent"
-                                    triggers="mouseenter:mouseleave" popoverTitle="Detalle del horario"
-                                    placement="bottom auto">
-                                    <span class="fa-solid fa-circle-info"></span>
-                                </button>
-    
-                                <ng-template #popContent class="popover-style">
-                                    <div>
-                                        <h5>Materia: </h5>
-                                        <p>{{schedule[day][hourIndex].infoStudent.subject.name}}</p>
-                                        <h6>Dia:</h6>
-                                        <p class="text-capitalize">
-                                            {{schedule[day][hourIndex].infoStudent.group.block.day}}
-                                            ({{schedule[day][hourIndex].infoStudent.group.block.start}}:00 - {{schedule[day][hourIndex].infoStudent.group.block.end}}:00)
-                                        </p>
-                                        <h6>Grupo:</h6>
-                                        <p>{{schedule[day][hourIndex].infoStudent.group.id}}</p>
-                                        <h6>Ubicación y Profesor</h6>                            
-                                        <p>{{schedule[day][hourIndex].infoStudent.group.block.loc}}</p>
-                                    </div>
-    
-                                    
-                                </ng-template>                            
-    
-    
-                            </div>
-                        </div>
-                    </td>
-
-                    <td class="my-row" *ngIf="schedule[day][hourIndex].infoStudent == null">
-                        <div>                        
-                            <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                            <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                            <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
-                            <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
-                        </div>
-                    </td>
-
-                </table>
-        
-
-
-            </tr>
-
-        </table>
-    </div>
-
-</div>
 
 <div class="content m-top-bottom-3" *ngIf="scheduledList.length>0">
     <button class="btn btn-primary" (click)="printSchedule()">
