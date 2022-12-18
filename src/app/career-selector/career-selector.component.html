@@ -24,6 +24,9 @@
         </div>
 
     </div>
+    <div class="subject-container my-5" *ngIf="isSelectedCareer()">
+        <h5> Tu carrera seleccionada ahora es {{selectedCareer}}</h5>
+    </div>
     <div *ngIf="isSelectedCareer()">
         <div class="subject-container">
 
