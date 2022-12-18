@@ -7,12 +7,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CareerSelectorComponent } from './career-selector/career-selector.component';
 import { FormsModule } from '@angular/forms';
 import { SubjectCheckerComponent } from './subject-checker/subject-checker.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CareerSelectorComponent,
     SubjectCheckerComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
