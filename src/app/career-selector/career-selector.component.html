@@ -194,12 +194,6 @@
                         </div>
                         
                     </div>
-                    <div *ngIf="schedule[day][hourIndex].infoStudent == null">                        
-                        <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                        <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                        <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
-                        <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
-                    </div>
                 </td>
             
             </tr>
@@ -247,12 +241,7 @@
                         <div><small>{{schedule[day][hourIndex].infoStudent.group.block.loc}}</small></div>
                         
                     </div>
-                    <div *ngIf="schedule[day][hourIndex].infoStudent == null">                        
-                        <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                        <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                        <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
-                        <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
-                    </div>
+
                 </td>
             
             </tr>
@@ -295,12 +284,7 @@
                                     <h6>{{item.infoStudent.subject.name}}</h6>
                                     <small>{{item.infoStudent.group.block.loc}}</small>
                                 </div>
-                                <div *ngIf="item.infoStudent == null">                        
-                                    <span *ngIf="dayIndex >= 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                                    <span *ngIf="hourIndex <= 6 && dayIndex < 5" class="fa-solid fa-bed" style="color: darkslategray"></span>
-                                    <span *ngIf="hourIndex > 6 && hourIndex < 13 && dayIndex < 5" class="fa-solid fa-cannabis" style="color: green"></span>                    
-                                    <span *ngIf="hourIndex >= 13  && dayIndex < 5" class="fa-solid fa-beer-mug-empty" style="color: brown"></span>
-                                </div>
+
 
                             </div>
                         </div>
